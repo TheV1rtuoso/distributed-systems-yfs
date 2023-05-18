@@ -1,4 +1,4 @@
-LAB=2
+LAB=3
 SOL=0
 RPC=./rpc
 LAB2GE=$(shell expr $(LAB) \>\= 2)
@@ -32,7 +32,7 @@ LDLIBS += $(shell test -f `gcc -print-file-name=libdl.so` && echo -ldl)
 CC = g++
 CXX = g++
 
-lab:  lab2
+lab:  lab3
 lab1: rpc/rpctest lock_server lock_tester lock_demo
 lab2: yfs_client extent_server
 lab3: yfs_client extent_server
@@ -119,15 +119,15 @@ l1-sol:
 
 l2:
 	./mklab.pl 2 0 l2 GNUmakefile $(rpclib) $(yfs_client) $(extent_server) $(lock_server) start.sh\
-	 stop.sh test-lab-2.pl mkfs.sh $(hfiles2)  $(hfiles1)
+	 stop.sh test-lab-2.pl mkfs.sh $(hfiles2) $(hfiles1)
 
 l2-sol:
 	./mklab.pl 2 2 l2-sol GNUmakefile $(yfs_client) $(extent_server) $(rpclib) $(lock_server) start.sh\
 	 stop.sh test-lab-2.pl mkfs.sh $(hfiles2) $(hfiles1)
 
 l3:
-	./mklab.pl 3 0 l3 GNUmakefile  $(rpclib) $(yfs_client) $(extent_server) start.sh\
-	 stop.sh test-lab-2.pl mkfs.sh $(hfiles2) test-lab-3.pl
+	./mklab.pl 3 0 l3 GNUmakefile  $(rpclib) $(yfs_client) $(extent_server) $(lock_server) start.sh\
+	 stop.sh test-lab-2.pl mkfs.sh $(hfiles2) $(hfiles1) test-lab-3.pl
 
 l3-sol:
 	./mklab.pl 3 3 l3-sol GNUmakefile  $(yfs_client) $(extent_server) $(rpclib) $(lock_server) start.sh\
@@ -190,9 +190,3 @@ l8-sol:
 .PHONY : clean
 clean : 
 	rm -rf rpc/rpctest rpc/*.o rpc/*.d rpc/librpc.a *.o *.d yfs_client extent_server lock_server lock_tester lock_demo rpctest test-lab-4-b test-lab-4-c
-
-
-#LAB2 to verify
-# ./start.sh
-# ./test-lab-2.pl ./yfs1
-# ./stop.sh
